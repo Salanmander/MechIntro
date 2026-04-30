@@ -3,8 +3,13 @@ class_name Mech
 
 signal selected(selected_mech: Mech)
 
+var move_speed: int
+var moved_this_turn: int
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	move_speed = 2
+	moved_this_turn = 0
 	pass # Replace with function body.
 
 func set_parameters(pos: Vector2) -> void:
@@ -25,10 +30,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			
 	
-
+func get_remaining_move() -> int:
+	return max(move_speed - moved_this_turn, 0)
 	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func spend_move(spent: int) -> void:
+	moved_this_turn += spent
+	
+func new_turn() -> void:
+	moved_this_turn = 0
 	
 	

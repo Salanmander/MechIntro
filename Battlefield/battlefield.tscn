@@ -1,17 +1,19 @@
-[gd_scene load_steps=9 format=4 uid="uid://pry3t8013cnt"]
+[gd_scene load_steps=13 format=4 uid="uid://pry3t8013cnt"]
 
 [ext_resource type="Texture2D" uid="uid://dnxsd4ntd7c1p" path="res://Battlefield/Terrain/desert.png" id="1_3ap0c"]
 [ext_resource type="Script" path="res://Battlefield/battlefield.gd" id="1_g6cu1"]
 [ext_resource type="Texture2D" uid="uid://d105ev6oaholx" path="res://Battlefield/Terrain/water.png" id="2_2ytft"]
 [ext_resource type="PackedScene" uid="uid://bik8dij1wkkxt" path="res://Battlefield/Mech/mech.tscn" id="3_gcsy7"]
 [ext_resource type="Script" path="res://Battlefield/Terrain/terrain.gd" id="4_0kc5b"]
+[ext_resource type="Texture2D" uid="uid://ditqfcoinjoq6" path="res://Battlefield/Terrain/CanMove.png" id="5_3b5ta"]
+[ext_resource type="Script" path="res://Battlefield/Terrain/move_overlay.gd" id="6_fayhs"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r8cwc"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nav4n"]
 texture = ExtResource("1_3ap0c")
 texture_region_size = Vector2i(128, 144)
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l2q48"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_elwt6"]
 texture = ExtResource("2_2ytft")
 texture_region_size = Vector2i(128, 144)
 0:0/0 = 0
@@ -20,8 +22,19 @@ texture_region_size = Vector2i(128, 144)
 tile_shape = 3
 tile_layout = 5
 tile_size = Vector2i(128, 144)
-sources/0 = SubResource("TileSetAtlasSource_r8cwc")
-sources/1 = SubResource("TileSetAtlasSource_l2q48")
+sources/0 = SubResource("TileSetAtlasSource_nav4n")
+sources/1 = SubResource("TileSetAtlasSource_elwt6")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_riqys"]
+texture = ExtResource("5_3b5ta")
+texture_region_size = Vector2i(128, 144)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_0fdf6"]
+tile_shape = 3
+tile_layout = 5
+tile_size = Vector2i(128, 144)
+sources/0 = SubResource("TileSetAtlasSource_riqys")
 
 [node name="Battlefield" type="Node2D"]
 script = ExtResource("1_g6cu1")
@@ -31,8 +44,22 @@ tile_map_data = PackedByteArray("AAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAACAP//AAAAAAA
 tile_set = SubResource("TileSet_b2lv4")
 script = ExtResource("4_0kc5b")
 
+[node name="MoveOverlay" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_0fdf6")
+script = ExtResource("6_fayhs")
+
 [node name="Mech" parent="." instance=ExtResource("3_gcsy7")]
 position = Vector2(194, 70)
 
+[node name="EndTurn" type="Button" parent="."]
+offset_left = 1564.0
+offset_top = 895.0
+offset_right = 1746.0
+offset_bottom = 958.0
+theme_override_font_sizes/font_size = 40
+action_mode = 0
+text = "End Turn"
+
 [connection signal="click_at" from="Terrain" to="." method="_on_terrain_click_at"]
 [connection signal="selected" from="Mech" to="." method="_on_mech_selected"]
+[connection signal="pressed" from="EndTurn" to="." method="_on_end_turn_pressed"]
