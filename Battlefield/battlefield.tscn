@@ -1,9 +1,8 @@
-[gd_scene load_steps=13 format=4 uid="uid://pry3t8013cnt"]
+[gd_scene load_steps=14 format=4 uid="uid://pry3t8013cnt"]
 
 [ext_resource type="Texture2D" uid="uid://dnxsd4ntd7c1p" path="res://Battlefield/Terrain/desert.png" id="1_3ap0c"]
 [ext_resource type="Script" path="res://Battlefield/battlefield.gd" id="1_g6cu1"]
 [ext_resource type="Texture2D" uid="uid://d105ev6oaholx" path="res://Battlefield/Terrain/water.png" id="2_2ytft"]
-[ext_resource type="PackedScene" uid="uid://bik8dij1wkkxt" path="res://Battlefield/Mech/mech.tscn" id="3_gcsy7"]
 [ext_resource type="Script" path="res://Battlefield/Terrain/terrain.gd" id="4_0kc5b"]
 [ext_resource type="Texture2D" uid="uid://ditqfcoinjoq6" path="res://Battlefield/Terrain/CanMove.png" id="5_3b5ta"]
 [ext_resource type="Script" path="res://Battlefield/Terrain/move_overlay.gd" id="6_fayhs"]
@@ -36,6 +35,12 @@ tile_layout = 5
 tile_size = Vector2i(128, 144)
 sources/0 = SubResource("TileSetAtlasSource_riqys")
 
+[sub_resource type="Theme" id="Theme_c5d73"]
+default_font_size = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ifvc"]
+bg_color = Color(0.281187, 0.281187, 0.281187, 1)
+
 [node name="Battlefield" type="Node2D"]
 script = ExtResource("1_g6cu1")
 
@@ -48,18 +53,30 @@ script = ExtResource("4_0kc5b")
 tile_set = SubResource("TileSet_0fdf6")
 script = ExtResource("6_fayhs")
 
-[node name="Mech" parent="." instance=ExtResource("3_gcsy7")]
-position = Vector2(194, 70)
+[node name="Controls" type="Panel" parent="."]
+offset_left = 1587.0
+offset_right = 1796.0
+offset_bottom = 997.0
+theme = SubResource("Theme_c5d73")
+theme_override_styles/panel = SubResource("StyleBoxFlat_7ifvc")
 
-[node name="EndTurn" type="Button" parent="."]
-offset_left = 1564.0
-offset_top = 895.0
-offset_right = 1746.0
-offset_bottom = 958.0
-theme_override_font_sizes/font_size = 40
+[node name="Weapons" type="VBoxContainer" parent="Controls"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 31.0
+offset_right = -35.0
+offset_bottom = 314.0
+
+[node name="EndTurn" type="Button" parent="Controls"]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 924.0
+offset_right = 195.0
+offset_bottom = 987.0
 action_mode = 0
 text = "End Turn"
 
 [connection signal="click_at" from="Terrain" to="." method="_on_terrain_click_at"]
-[connection signal="selected" from="Mech" to="." method="_on_mech_selected"]
-[connection signal="pressed" from="EndTurn" to="." method="_on_end_turn_pressed"]
+[connection signal="pressed" from="Controls/EndTurn" to="." method="_on_end_turn_pressed"]

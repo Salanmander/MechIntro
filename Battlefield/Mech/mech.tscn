@@ -1,10 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://bik8dij1wkkxt"]
+[gd_scene load_steps=8 format=3 uid="uid://bik8dij1wkkxt"]
 
 [ext_resource type="Script" path="res://Battlefield/Mech/mech.gd" id="1_l2ovk"]
-[ext_resource type="Texture2D" uid="uid://c7jagelceang3" path="res://icon.svg" id="1_s1k1e"]
+[ext_resource type="Texture2D" uid="uid://cxtq6lfvmm5r" path="res://Battlefield/Mech/mech.png" id="2_x85m1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jagsu"]
 size = Vector2(90, 90)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hu3nr"]
+bg_color = Color(0, 0.179314, 0.319548, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7rsxp"]
+bg_color = Color(0, 0.500351, 0.83656, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vkafd"]
+bg_color = Color(0.259741, 0.198534, 0.1508, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nakal"]
+bg_color = Color(0.824012, 0.725065, 0.650892, 1)
 
 [node name="Mech" type="Area2D"]
 script = ExtResource("1_l2ovk")
@@ -12,12 +24,31 @@ script = ExtResource("1_l2ovk")
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_jagsu")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.7, 0.7)
-texture = ExtResource("1_s1k1e")
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_x85m1")
 
 [node name="Highlight" type="Line2D" parent="."]
 visible = false
 points = PackedVector2Array(-45, -45, -45, 45, 45, 45, 45, -45)
 closed = true
 width = 3.0
+
+[node name="ShieldBar" type="ProgressBar" parent="."]
+offset_left = -49.0
+offset_top = -65.0
+offset_right = 51.0
+offset_bottom = -56.0
+theme_override_styles/background = SubResource("StyleBoxFlat_hu3nr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7rsxp")
+value = 40.0
+show_percentage = false
+
+[node name="ArmorBar" type="ProgressBar" parent="."]
+offset_left = -49.0
+offset_top = -54.0
+offset_right = 51.0
+offset_bottom = -45.0
+theme_override_styles/background = SubResource("StyleBoxFlat_vkafd")
+theme_override_styles/fill = SubResource("StyleBoxFlat_nakal")
+value = 40.0
+show_percentage = false

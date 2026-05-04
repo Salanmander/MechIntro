@@ -1,0 +1,6 @@
+Mech holds an array of weapons
+Each weapon holds a button
+Buttons get passed to battlefield to be displayed.
+Button callback connects to a weapon method.
+When target is selected, it gets passed down to mech, then weapon.
+Weapon firing callback uses itself and the target to make calculations, display the animation, affect the target, etc.
