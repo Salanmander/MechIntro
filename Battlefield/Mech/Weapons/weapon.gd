@@ -6,6 +6,8 @@ var fire_button: Button
 var target: Mech = null
 
 var accuracy: float = 0.75
+var mech_accuracy: float = 0
+
 var dam_shield: int = 20
 var dam_armor: int = 10
 
@@ -31,7 +33,7 @@ func fire() -> void:
 	if(not target):
 		return
 	disable()
-	if(randf() > accuracy):
+	if(randf() > accuracy + mech_accuracy):
 		draw_laser_hit(false)
 		return
 	draw_laser_hit(true)
@@ -59,7 +61,6 @@ func draw_laser_hit(hit: bool) -> void:
 		length = dist*2
 	
 	angle += global_position.angle_to_point(target.position)
-	print(rad_to_deg(global_position.angle_to_point(target.position)))
 	
 	var laser: Line2D = Line2D.new()
 	laser.width = 2
@@ -82,3 +83,4 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+	

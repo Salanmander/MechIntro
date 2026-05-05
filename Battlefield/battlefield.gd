@@ -20,6 +20,8 @@ func _ready() -> void:
 	new_mech.set_parameters($Terrain.map_to_local(grid_loc), friendly_sprite)
 	new_mech.clicked.connect(_on_mech_clicked)
 	new_mech.add_laser()
+	new_mech.add_module(Module.create_speed(2, 10))
+	new_mech.add_module(Module.create_accuracy(0.25, 10))
 	add_child(new_mech)
 	friendly_mechs.append(new_mech)
 	
@@ -35,6 +37,7 @@ func _ready() -> void:
 	grid_loc = Vector2i(8, -7)
 	new_mech.set_parameters($Terrain.map_to_local(grid_loc), enemy_sprite)
 	new_mech.clicked.connect(_on_mech_clicked)
+	new_mech.add_module(Module.create_shield(130, 10))
 	add_child(new_mech)
 	enemy_mechs.append(new_mech)
 	

@@ -3,49 +3,66 @@ class_name Mech
 
 signal clicked(selected_mech: Mech)
 
-var move_speed: int
-var moved_this_turn: int
+var move_speed: int = 0
+var moved_this_turn: int = 0
 
 var weapons: Array[Weapon]
+var modules: Array[Module]
 
-var max_shield: int
-var max_armor: int
-var shield: int
-var armor: int
+var max_shield: int: set = set_max_shield
+var max_armor: int: set = set_max_armor
+var shield: int: set = set_shield
+var armor: int: set = set_armor
+
+var accuracy_bonus: float: set = set_accuracy_bonus
 
 func _init() -> void:
-	max_shield = 50
-	max_armor = 100
-	shield = max_shield
-	armor = max_armor
 	
-
 	weapons = []
 	
 	add_laser()
 	add_laser()
 	
-	move_speed = 4
-	moved_this_turn = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	max_armor = 100
 	
+	apply_modules()
 	
-	$ShieldBar.max_value = max_shield
-	$ShieldBar.value = shield
-	$ArmorBar.max_value = max_armor
-	$ArmorBar.value = armor
+	shield = max_shield
+	armor = max_armor
+	
 	pass # Replace with function body.
+
 
 func set_parameters(pos: Vector2, sprite_path: String) -> void:
 	position = pos
 	$Sprite.texture = load(sprite_path)
 
 
+func apply_modules() -> void:
+	max_shield = 0
+	accuracy_bonus = 0
+	move_speed = 0
+	for module: Module in modules:
+		apply_module(module)
+	
+	
+
+func apply_module(module: Module) -> void:
+	move_speed += module.speed
+	max_shield += module.shield
+	accuracy_bonus = accuracy_bonus + module.accuracy
+
+func add_module(module: Module) -> void:
+	modules.append(module)
+	
+
 func add_laser() -> void:
 	var new_weapon: Weapon = Weapon.new()
 	new_weapon.position = Vector2(randi_range(-30, 30), randi_range(-30, 30))
+	new_weapon.mech_accuracy = accuracy_bonus
 	weapons.append(new_weapon)
 	add_child(new_weapon)
 
@@ -94,9 +111,35 @@ func has_shield() -> bool:
 
 func apply_damage_shield(damage: int) -> void:
 	shield = max(0, shield - damage)
-	$ShieldBar.value = shield
 
 func apply_damage_armor(damage: int) -> void:
 	armor = max(0, armor - damage)
 	$ArmorBar.value = armor
 	
+func set_max_shield(value: int) -> void:
+	max_shield = value
+	if(max_shield == 0):
+		$ShieldBar.visible = false
+	else:
+		$ShieldBar.visible = true
+		$ShieldBar.max_value = max_shield
+		$ShieldBar.size.x = float(max_shield)/(max_armor) * $ArmorBar.size.x
+		$ShieldBar.position.x = -($ShieldBar.size.x / 2)
+
+
+func set_max_armor(value: int) -> void:
+	max_armor = value
+	$ArmorBar.max_value = max_armor
+	
+func set_shield(value: int) -> void:
+	shield = value
+	$ShieldBar.value = shield
+	
+func set_armor(value: int) -> void:
+	armor = value
+	$ArmorBar.value = armor
+	
+func set_accuracy_bonus(value: float) -> void:
+	accuracy_bonus = value
+	for weapon: Weapon in weapons:
+		weapon.mech_accuracy = accuracy_bonus
