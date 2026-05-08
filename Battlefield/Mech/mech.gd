@@ -1,6 +1,11 @@
 extends Area2D
 class_name Mech
 
+static var pack_mech: PackedScene = load("res://Battlefield/Mech/mech.tscn")
+
+# Holds the original chassis description of the mech
+var dict: Dictionary
+
 signal clicked(selected_mech: Mech)
 
 var move_speed: int = 0
@@ -15,6 +20,13 @@ var shield: int: set = set_shield
 var armor: int: set = set_armor
 
 var accuracy_bonus: float: set = set_accuracy_bonus
+
+static func create_from_dict(mech_dict: Dictionary) -> Mech:
+	var new_mech: Mech = pack_mech.instantiate()
+	new_mech.dict = mech_dict
+	new_mech.set_parameters(Vector2(0, 0), mech_dict["battle_img"])
+	return new_mech
+
 
 func _init() -> void:
 	
@@ -32,8 +44,6 @@ func _ready() -> void:
 	
 	shield = max_shield
 	armor = max_armor
-	
-	pass # Replace with function body.
 
 
 func set_parameters(pos: Vector2, sprite_path: String) -> void:

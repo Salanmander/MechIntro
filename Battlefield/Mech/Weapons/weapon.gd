@@ -2,7 +2,7 @@ extends Node2D
 class_name Weapon
 
 
-var fire_button: Button
+var fire_button: Button = null
 var target: Mech = null
 
 var accuracy: float = 0.75
@@ -11,10 +11,34 @@ var mech_accuracy: float = 0
 var dam_shield: int = 20
 var dam_armor: int = 10
 
-func _init() -> void:
+var spread: float = 0
+var weight: int = 0
+
+var weapon_type: String = ""
+
+
+# module dictionary contains:
+#   "type" (not used here)
+#   "weapon_type" (ignored for now, but recorded)
+#   "name": display name 
+#   "shield_dam"
+#   "armor_dam"
+#   "weight" 
+#   "spread": angular spread of weapon in radians
+static func create_from_dict(weap: Dictionary) -> Weapon:
+	var new_weap: Weapon = Weapon.new()
+	new_weap.dam_shield = weap["shield_dam"]
+	new_weap.dam_armor = weap["armor_dam"]
+	new_weap.spread = weap["spread"]
+	new_weap.weight = weap["weight"]
+	new_weap.weapon_type = weap["weapon_type"]
+	return new_weap
+	
+func set_parameters(name: String) -> void:
 	fire_button = Button.new()
-	fire_button.text = "Laser"
+	fire_button.text = "name"
 	fire_button.button_down.connect(fire)
+
 	
 
 func get_fire_button() -> Button:

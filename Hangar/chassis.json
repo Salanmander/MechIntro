@@ -1,0 +1,32 @@
+[
+	{
+		"battle_img": "res://Battlefield/Mech/mech.png",
+		"hangar_img": "res://Hangar/hangarMech.png",
+		"slots": [
+			{
+				"type": "weapon",
+				"pos": [0.2, 0.48]
+			},
+			{
+				"type": "weapon",
+				"pos": [0.8, 0.48]
+			},
+			{
+				"type": "leg",
+				"pos": [0.2, 0.8]
+			},
+			{
+				"type": "leg",
+				"pos": [0.7, 0.8]
+			},
+			{
+				"type": "core",
+				"pos": [0.4, 0.1]
+			},
+			{
+				"type": "core",
+				"pos": [0.4, 0.3]
+			},
+		]
+	}
+]

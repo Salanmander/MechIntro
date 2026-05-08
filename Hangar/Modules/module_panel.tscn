@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3 uid="uid://bck6hn1djldjw"]
+
+[ext_resource type="Script" path="res://Hangar/Modules/module_panel.gd" id="1_at2lc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ash6"]
+bg_color = Color(0.743482, 0.743482, 0.743482, 0.701961)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="ModulePanel" type="Panel"]
+offset_right = 288.0
+offset_bottom = 88.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ash6")
+script = ExtResource("1_at2lc")
+
+[node name="NameLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 13.0
+offset_right = -23.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Name"
+vertical_alignment = 1
+
+[node name="WeightLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 13.0
+offset_right = -23.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "W"
+horizontal_alignment = 2
+vertical_alignment = 1

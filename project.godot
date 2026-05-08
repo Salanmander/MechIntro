@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="MechIntro"
-run/main_scene="res://Battlefield/battlefield.tscn"
+run/main_scene="res://Hangar/hangar.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Consts="*res://Singletons/consts.gd"
 
 [display]
 

@@ -1,0 +1,75 @@
+[
+	{
+		"type": "weapon",
+		"name": "laser",
+		"weapon_type": "laser",
+		"shield_dam": 20,
+		"armor_dam": 10,
+		"spread": 13,
+		"weight": 10 
+	},
+	{
+		"type": "weapon",
+		"name": "cannon",
+		"weapon_type": "cannon",
+		"shield_dam": 5,
+		"armor_dam": 30,
+		"spread": 7,
+		"weight": 20 
+	},
+	{
+		"type": "leg",
+		"name": "small actuator",
+		"effects": [
+			{
+				"type": "speed",
+				"val": 2
+			}
+		] ,
+		"weight": 5
+	},
+	{
+		"type": "leg",
+		"name": "large actuator",
+		"effects": [
+			{
+				"type": "speed",
+				"val": 3
+			}
+		] ,
+		"weight": 10
+	},
+	{
+		"type": "leg",
+		"name": "stabilizer",
+		"effects": [
+			{
+				"type": "accuracy",
+				"val": 0.05
+			}
+		] ,
+		"weight": 5
+	},
+	{
+		"type": "core",
+		"name": "small shield",
+		"effects": [
+			{
+				"type": "shield",
+				"val": 30
+			}
+		] ,
+		"weight": 5
+	},
+	{
+		"type": "core",
+		"name": "large shield",
+		"effects": [
+			{
+				"type": "shield",
+				"val": 60
+			}
+		] ,
+		"weight": 15
+	},
+]
