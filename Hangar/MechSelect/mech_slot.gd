@@ -7,7 +7,11 @@ class_name MechSlot
 const width = Consts.MECH_PANEL_WID
 const height = Consts.MECH_PANEL_HGT
 
-var type: String
+var held_panel: MechPanel = null
+
+var click_started: bool = false
+
+signal selected()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -36,30 +40,57 @@ func clear_mech() -> void:
 		if child is MechPanel:
 			child.queue_free()
 			remove_child(child)
+	held_panel = null
+	
+func set_inactive() -> void:
+	add_theme_stylebox_override("panel", inactive_stylebox)
+	
+func select() -> void:
+	selected.emit()
+	add_theme_stylebox_override("panel", active_stylebox)
 	
 	
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
-	if typeof(data) == TYPE_DICTIONARY and data.has("battle_img"):
+	if( held_panel ):
+		return false
+	elif typeof(data) == TYPE_DICTIONARY and data.has("battle_img"):
 		return true
 	elif data is Mech:
 		return true
 	return false
 
+
 func _drop_data(at_position: Vector2, data: Variant) -> void:
 	var new_panel: MechPanel
 	if(typeof(data) == TYPE_DICTIONARY):
 		new_panel = MechPanel.create_from_dict(data)
+		new_panel.instantiate_mech()
 	else:
 		new_panel = MechPanel.create_from_mech(data)
 	add_child(new_panel)
+	held_panel = new_panel
 	
 	#Border width is 6 pixels
 	new_panel.offset_left = 6
 	new_panel.offset_top = 6
 	
 	new_panel.drag_started.connect(_on_module_dragged)
+	select()
 	pass
 
 
 func _on_module_dragged() -> void:
 	clear_mech()
+	
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if get_global_rect().has_point(event.position):
+			if event.is_pressed():
+				click_started = true
+			elif event.is_released():
+				click_started = false
+				if(held_panel != null):
+					select()
+					
+		elif event.is_released():
+			click_started = false

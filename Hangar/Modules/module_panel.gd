@@ -26,7 +26,7 @@ static func create_from_mod_dict(mod: Dictionary) -> ModulePanel:
 
 # module dictionary contains:
 #   "weapon_type", "shield_dam", "armor_dam", "spread"
-#   "type": the kind of slot the module can go in
+#   "type": the kind of slot the module can go in (always "weapon")
 #   "name": display name
 static func create_from_weapon_dict(weap: Dictionary) -> ModulePanel:
 	var new_panel: ModulePanel = pack_panel.instantiate()
@@ -34,6 +34,22 @@ static func create_from_weapon_dict(weap: Dictionary) -> ModulePanel:
 	new_panel.weapon = Weapon.create_from_dict(weap)
 	new_panel.get_node("NameLabel").text = weap["name"]
 	new_panel.get_node("WeightLabel").text = str(new_panel.weapon.weight)
+	return new_panel
+	
+static func create_from_module(mod: Module) -> ModulePanel:
+	var new_panel: ModulePanel = pack_panel.instantiate()
+	new_panel.type = mod.type
+	new_panel.module = mod
+	new_panel.get_node("NameLabel").text = mod.name
+	new_panel.get_node("WeightLabel").text = str(mod.weight)
+	return new_panel
+	
+static func create_from_weapon(weap: Weapon) -> ModulePanel:
+	var new_panel: ModulePanel = pack_panel.instantiate()
+	new_panel.type = "weapon"
+	new_panel.weapon = weap
+	new_panel.get_node("NameLabel").text = weap.weapon_name
+	new_panel.get_node("WeightLabel").text = str(weap.weight)
 	return new_panel
 
 # Called when the node enters the scene tree for the first time.

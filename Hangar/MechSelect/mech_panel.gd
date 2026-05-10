@@ -23,8 +23,12 @@ static func create_from_mech(mech: Mech) -> MechPanel:
 	var new_panel: MechPanel = pack_panel.instantiate()
 	var mech_dict = mech.get_dict()
 	new_panel.dict = mech_dict
+	new_panel.mech = mech
 	new_panel.get_node("Image").texture = load(mech_dict["battle_img"])
 	return new_panel
+	
+func instantiate_mech() -> void:
+	mech = Mech.create_from_dict(dict)
 	
 
 

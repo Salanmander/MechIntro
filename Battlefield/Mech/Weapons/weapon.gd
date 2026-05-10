@@ -15,9 +15,9 @@ var spread: float = 0
 var weight: int = 0
 
 var weapon_type: String = ""
+var weapon_name: String = ""
 
-
-# module dictionary contains:
+# weapon dictionary contains:
 #   "type" (not used here)
 #   "weapon_type" (ignored for now, but recorded)
 #   "name": display name 
@@ -32,14 +32,13 @@ static func create_from_dict(weap: Dictionary) -> Weapon:
 	new_weap.spread = weap["spread"]
 	new_weap.weight = weap["weight"]
 	new_weap.weapon_type = weap["weapon_type"]
+	new_weap.weapon_name = weap["name"]
 	return new_weap
-	
+
 func set_parameters(name: String) -> void:
 	fire_button = Button.new()
 	fire_button.text = "name"
 	fire_button.button_down.connect(fire)
-
-	
 
 func get_fire_button() -> Button:
 	return fire_button

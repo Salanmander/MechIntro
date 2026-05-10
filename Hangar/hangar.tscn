@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://ddp4ll61bfmck"]
+[gd_scene load_steps=9 format=3 uid="uid://ddp4ll61bfmck"]
 
 [ext_resource type="Texture2D" uid="uid://be4g7vmcmpw2m" path="res://Hangar/hangarMech.png" id="1_kd3wd"]
 [ext_resource type="Script" path="res://Hangar/hangar.gd" id="1_txdjg"]
 [ext_resource type="Script" path="res://Hangar/mech_texture.gd" id="2_353t0"]
 [ext_resource type="Script" path="res://Hangar/mech_container.gd" id="2_bvw4t"]
+[ext_resource type="Script" path="res://Hangar/squad.gd" id="3_jboxj"]
 
 [sub_resource type="Theme" id="Theme_ur202"]
 default_font_size = 30
@@ -73,6 +74,7 @@ offset_top = 148.0
 offset_right = -2.0
 offset_bottom = 314.0
 grow_horizontal = 2
+script = ExtResource("3_jboxj")
 
 [node name="MechContainer" type="HBoxContainer" parent="Squad"]
 layout_mode = 0

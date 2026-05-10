@@ -2,9 +2,7 @@ extends Control
 
 
 func _ready() -> void:
-	$Squad/MechContainer.add_child(MechSlot.new())
-	$Squad/MechContainer.add_child(MechSlot.new())
-	$Squad/MechContainer.add_child(MechSlot.new())
+	$Squad.slot_selected.connect(_on_squad_slot_selected)
 	
 	var mods_file: FileAccess = FileAccess.open("res://Hangar/Modules/modules.json", FileAccess.READ)
 	var mods_string: String = mods_file.get_as_text()
@@ -68,3 +66,8 @@ func highlight_for_tab(tab: int) -> void:
 func _on_module_select_tab_changed(tab: int) -> void:
 	highlight_for_tab(tab)
 	pass # Replace with function body.
+	
+func _on_squad_slot_selected(slot: MechSlot) -> void:
+	$Design/MechTexture.show_mech(slot)
+	highlight_for_tab($ModuleSelect.current_tab)
+	pass

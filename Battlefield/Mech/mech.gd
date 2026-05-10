@@ -11,8 +11,12 @@ signal clicked(selected_mech: Mech)
 var move_speed: int = 0
 var moved_this_turn: int = 0
 
-var weapons: Array[Weapon]
-var modules: Array[Module]
+# part dictionaries contain:
+#   "type": "weapon" or "module"
+#   "content": Weapon or Module (may be null)
+#   "hangar_pos": location to display module slot in hangar
+#   "battle_pos": only present for weapons, weapon fire location on top-down
+var parts: Array[Dictionary]
 
 var max_shield: int: set = set_max_shield
 var max_armor: int: set = set_max_armor
@@ -21,20 +25,46 @@ var armor: int: set = set_armor
 
 var accuracy_bonus: float: set = set_accuracy_bonus
 
+
+# mech dictionary contains
+#   "battle_img": top-down display sprite
+#   "hangar_img" (not used here)
+#   "slots": array of dictionaries describing each slot
 static func create_from_dict(mech_dict: Dictionary) -> Mech:
 	var new_mech: Mech = pack_mech.instantiate()
 	new_mech.dict = mech_dict
 	new_mech.set_parameters(Vector2(0, 0), mech_dict["battle_img"])
+	var slots: Array[Dictionary] = Array(mech_dict["slots"], TYPE_DICTIONARY, "", null)
+	new_mech.create_part_slots(slots)
 	return new_mech
 
 
+
+# passed in dictionaries contain:
+#   "type": the kind of part that can go there
+#   "hangar_pos": location to display in hangar
+#   "battle_pos": only present for weapons, weapon fire location on top-down
+
+# dictionaries to be created should contain:
+#   "type": the kind of part that can go there
+#   "content": Weapon or Module (may be null)
+#   "hangar_pos": location to display module slot in hangar
+#   "battle_pos": only present for weapons, weapon fire location on top-down
+func create_part_slots(slots: Array[Dictionary]) -> void:
+	parts = []
+	for slot: Dictionary in slots:
+		var new_dict = slot.duplicate()
+		new_dict["content"] = null
+		parts.append(new_dict)
+
+
+func get_dict() -> Dictionary:
+	return dict
+
 func _init() -> void:
-	
-	weapons = []
+	parts = []
 	
 	add_laser()
-	add_laser()
-	
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -55,9 +85,9 @@ func apply_modules() -> void:
 	max_shield = 0
 	accuracy_bonus = 0
 	move_speed = 0
-	for module: Module in modules:
-		apply_module(module)
-	
+	for part: Dictionary in parts:
+		if(part["type"] == "module"):
+			apply_module(part["content"])
 	
 
 func apply_module(module: Module) -> void:
@@ -65,15 +95,87 @@ func apply_module(module: Module) -> void:
 	max_shield += module.shield
 	accuracy_bonus = accuracy_bonus + module.accuracy
 
+# Creates ModuleSlot objects, and passes an array of dictionaries that contain
+#   "slot": the ModuleSlot object
+#   "pos": the place in the hangar to display it
+func get_slots_with_positions() -> Array[Dictionary]:
+	var slots_arr: Array[Dictionary] = []
+	for i in range(parts.size()):
+		var slot_dict: Dictionary = parts[i]
+		var slot: ModuleSlot = ModuleSlot.new()
+		slot.set_type(slot_dict["type"])
+		slot.contents_changed_to.connect(_on_slot_changed_to.bind(i))
+		if( slot_dict["content"] != null ):
+			if slot_dict["type"] == "weapon":
+				slot.set_panel_from_weapon(slot_dict["content"])
+			else:
+				slot.set_panel_from_module(slot_dict["content"])
+		
+		slots_arr.append({
+			"slot": slot,
+			"pos": slot_dict["hangar_pos"]
+		})
+		
+	return slots_arr
+
+
+func _on_slot_changed_to(new_part: ModulePanel, index: int) -> void:
+	if( new_part == null ):
+		remove_part_at_slot(index)
+	elif( new_part.type == "weapon" ):
+		set_weapon_at_slot(index, new_part.weapon)
+	else:
+		set_module_at_slot(index, new_part.module)
+
+
+func remove_part_at_slot(index: int) -> void:
+	var part_dict: Dictionary = parts[index]
+	part_dict["content"] = null
+
+func set_module_at_slot(index: int, module: Module ) -> void:
+	var module_dict: Dictionary = parts[index]
+	if( module_dict["type"] == "weapon"):
+		assert(false, "module passed into wrong part index")
+		return
+	module_dict["content"] = module
+	pass
+	
+	
+func set_weapon_at_slot(index: int, weapon: Weapon ) -> void:
+	var weapon_dict: Dictionary = parts[index]
+	if( weapon_dict["type"] != "weapon"):
+		assert(false, "weapon passed into wrong part index")
+		return
+	var cur_weapon: Weapon = weapon_dict["content"]
+	if( cur_weapon != null ):
+		cur_weapon.queue_free()
+		remove_child(cur_weapon)
+	weapon_dict["content"] = weapon
+	add_weapon(weapon)
+	pass
+
 func add_module(module: Module) -> void:
-	modules.append(module)
+	var module_dict: Dictionary = {}
+	module_dict["type"] = "module"
+	module_dict["content"] = module
+	parts.append(module_dict)
+	
+
+func add_weapon(new_weapon: Weapon) -> void:
+	new_weapon.mech_accuracy = accuracy_bonus
+	add_child(new_weapon)
 	
 
 func add_laser() -> void:
 	var new_weapon: Weapon = Weapon.new()
+	new_weapon.set_parameters("laser")
 	new_weapon.position = Vector2(randi_range(-30, 30), randi_range(-30, 30))
 	new_weapon.mech_accuracy = accuracy_bonus
-	weapons.append(new_weapon)
+	
+	var weapon_dict: Dictionary = {}
+	weapon_dict["type"] = "weapon"
+	weapon_dict["content"] = new_weapon
+	parts.append(weapon_dict)
 	add_child(new_weapon)
 
 func highlight() -> void:
@@ -83,8 +185,9 @@ func unhighlight() -> void:
 	$Highlight.visible = false
 	
 func target(new_target: Mech) -> void:
-	for weapon: Weapon in weapons:
-		weapon.change_target(new_target)
+	for part: Dictionary in parts:
+		if(part["type"] == "weapon"):
+			part["content"].change_target(new_target)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
@@ -104,8 +207,9 @@ func get_remaining_move() -> int:
 	
 func get_fire_buttons() -> Array[Button]:
 	var buttons: Array[Button] = []
-	for weapon: Weapon in weapons:
-		buttons.append(weapon.get_fire_button())
+	for part: Dictionary in parts:
+		if(part["type"] == "weapon"):
+			buttons.append(part["content"].get_fire_button())
 	return buttons
 	
 func spend_move(spent: int) -> void:
@@ -113,8 +217,9 @@ func spend_move(spent: int) -> void:
 	
 func new_turn() -> void:
 	moved_this_turn = 0
-	for weapon: Weapon in weapons:
-		weapon.new_turn()
+	for part: Dictionary in parts:
+		if(part["type"] == "weapon"):
+			part["content"].new_turn()
 
 func has_shield() -> bool:
 	return shield > 0
@@ -151,5 +256,7 @@ func set_armor(value: int) -> void:
 	
 func set_accuracy_bonus(value: float) -> void:
 	accuracy_bonus = value
-	for weapon: Weapon in weapons:
-		weapon.mech_accuracy = accuracy_bonus
+	for part: Dictionary in parts:
+		if(part["type"] == "weapon"):
+			part["content"].mech_accuracy = accuracy_bonus
+			

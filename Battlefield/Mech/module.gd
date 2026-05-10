@@ -2,6 +2,9 @@ extends Resource
 class_name Module
 
 
+var name: String = ""
+var type: String = ""
+
 var shield: int = 0
 var speed: int = 0
 var accuracy: float = 0
@@ -10,13 +13,15 @@ var weight: int = 0
 
 
 # module dictionary contains:
-#   "type", "name" (not used here)
+#   "type", "name" (not used here, recorded for keeping info around)
 #   "effects": array of dictionaries, each with
 #     "type": "shield", "speed", or "accuracy"
 #     "val": the amount granted of the given effect
 #   "weight": weight of the module
 static func create_from_dict(mod: Dictionary) -> Module:
 	var new_mod: Module = Module.new()
+	new_mod.type = mod["type"]
+	new_mod.name = mod["name"]
 	new_mod.weight = mod["weight"]
 	
 	for effect: Dictionary in mod["effects"]:
