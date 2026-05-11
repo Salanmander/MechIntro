@@ -11,6 +11,7 @@ var mech_accuracy: float = 0
 var dam_shield: int = 20
 var dam_armor: int = 10
 
+# spread is stored in degrees
 var spread: float = 0
 var weight: int = 0
 
@@ -33,12 +34,26 @@ static func create_from_dict(weap: Dictionary) -> Weapon:
 	new_weap.weight = weap["weight"]
 	new_weap.weapon_type = weap["weapon_type"]
 	new_weap.weapon_name = weap["name"]
+	new_weap.setup_button()
 	return new_weap
 
-func set_parameters(name: String) -> void:
+func setup_button() -> void:
 	fire_button = Button.new()
-	fire_button.text = "name"
+	update_fire_button_text()
 	fire_button.button_down.connect(fire)
+	
+func update_fire_button_text():
+	var button_text: String = weapon_name + "\n"
+	if( target ):
+		var hit_prob: float = get_hit_prob()
+		hit_prob *= 100
+		button_text += str(int(hit_prob)) + "%"
+	else:
+		button_text += "spread: " + str(spread) + "°"
+	
+	fire_button.text = button_text
+		
+	pass
 
 func get_fire_button() -> Button:
 	return fire_button
@@ -56,10 +71,9 @@ func fire() -> void:
 	if(not target):
 		return
 	disable()
-	if(randf() > accuracy + mech_accuracy):
-		draw_laser_hit(false)
+	var hit: bool = draw_laser_and_connect()
+	if( not hit ):
 		return
-	draw_laser_hit(true)
 	if(target.has_shield()):
 		target.apply_damage_shield(dam_shield)
 	else:
@@ -67,21 +81,22 @@ func fire() -> void:
 	pass
 	
 
-func draw_laser_hit(hit: bool) -> void:
+func draw_laser_and_connect() -> bool:
 	var dist: float = (target.position - global_position).length()
 	var max_ratio: float = target.get_radius() / dist
 	var max_angle: float = atan(max_ratio)
 	
-	var angle: float
+	var angle_spread: float = max(0, deg_to_rad(spread) * (1 - mech_accuracy))
+	
+	var angle: float = randf_range(-angle_spread, angle_spread)
+	var hit: bool = abs(angle) <= abs(max_angle)
 	var length: float
 	if(hit):
-		angle = randf_range(-max_angle, max_angle)
 		length = dist
 	else:
-		angle = randf_range(max_angle, 2*max_angle)
-		if( randf() > 0.5 ):
-			angle *= -1
-		length = dist*2
+		# bad magic number!
+		# Enough pixels to reliably go off the screen
+		length = 5000
 	
 	angle += global_position.angle_to_point(target.position)
 	
@@ -92,11 +107,23 @@ func draw_laser_hit(hit: bool) -> void:
 	add_child(laser)
 	
 	get_tree().create_timer(0.3).timeout.connect(laser.queue_free)
-	pass
+	return hit
+	
+func get_hit_prob() -> float:
+	if(not target):
+		return -1
+	var dist: float = (target.position - global_position).length()
+	var max_ratio: float = target.get_radius() / dist
+	var max_angle: float = atan(max_ratio)
+	
+	var angle_spread: float = max(0, deg_to_rad(spread) * (1 - mech_accuracy))
+	
+	return min( 1, max_angle/angle_spread )
 
 
 func change_target(new_target: Mech) -> void:
 	target = new_target
+	update_fire_button_text()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -54,7 +54,7 @@ tile_set = SubResource("TileSet_0fdf6")
 script = ExtResource("6_fayhs")
 
 [node name="Controls" type="Panel" parent="."]
-offset_left = 1587.0
+offset_left = 1532.0
 offset_right = 1796.0
 offset_bottom = 997.0
 theme = SubResource("Theme_c5d73")
@@ -66,15 +66,15 @@ anchors_preset = -1
 anchor_right = 1.0
 offset_left = 28.0
 offset_top = 31.0
-offset_right = -35.0
-offset_bottom = 314.0
+offset_right = -18.0
+offset_bottom = 617.0
 
 [node name="EndTurn" type="Button" parent="Controls"]
 layout_mode = 0
-offset_left = 13.0
-offset_top = 924.0
-offset_right = 195.0
-offset_bottom = 987.0
+offset_left = 55.0
+offset_top = 916.0
+offset_right = 237.0
+offset_bottom = 979.0
 action_mode = 0
 text = "End Turn"
 

@@ -111,4 +111,13 @@ expand_mode = 4
 stretch_mode = 5
 script = ExtResource("2_353t0")
 
+[node name="Start" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1600.0
+offset_top = 939.0
+offset_right = 1788.0
+offset_bottom = 990.0
+text = "Begin Match"
+
 [connection signal="tab_changed" from="ModuleSelect" to="." method="_on_module_select_tab_changed"]
+[connection signal="button_down" from="Start" to="." method="_on_start_button_down"]

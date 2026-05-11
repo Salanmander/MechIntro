@@ -35,7 +35,6 @@ func instantiate_mech() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	size_flags_horizontal = SIZE_SHRINK_CENTER
-	
 	# Border width of control this will be slotted over is 6 px
 	custom_minimum_size = Vector2(Consts.MECH_PANEL_WID-12, Consts.MECH_PANEL_HGT-12)
 

@@ -16,25 +16,10 @@ func _ready() -> void:
 	var friendly_sprite: String = "res://Battlefield/Mech/mech.png"
 	var enemy_sprite: String = "res://Battlefield/Mech/enemy.png"
 	
-	var grid_loc: Vector2i = Vector2i(5, 3)
-	new_mech.set_parameters($Terrain.map_to_local(grid_loc), friendly_sprite)
-	new_mech.clicked.connect(_on_mech_clicked)
-	new_mech.add_laser()
-	new_mech.add_module(Module.create_speed(2, 10))
-	new_mech.add_module(Module.create_accuracy(0.25, 10))
-	add_child(new_mech)
-	friendly_mechs.append(new_mech)
-	
-	new_mech = pack_mech.instantiate()
-	grid_loc = Vector2i(10, -6)
-	new_mech.set_parameters($Terrain.map_to_local(grid_loc), friendly_sprite)
-	new_mech.clicked.connect(_on_mech_clicked)
-	add_child(new_mech)
-	friendly_mechs.append(new_mech)
 	
 	
 	new_mech = pack_mech.instantiate()
-	grid_loc = Vector2i(8, -7)
+	var grid_loc = Vector2i(8, -7)
 	new_mech.set_parameters($Terrain.map_to_local(grid_loc), enemy_sprite)
 	new_mech.clicked.connect(_on_mech_clicked)
 	new_mech.add_module(Module.create_shield(130, 10))
@@ -52,9 +37,21 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func add_squad(squad: Array[Mech]) -> void:
+	var grid_locs: Array[Vector2i] = [
+		Vector2i(4, 2),
+		Vector2i(6, 2),
+		Vector2i(5, 0),
+		]
+	
+	for i in range (squad.size()):
+		var grid_loc: Vector2i = grid_locs[i]
+		var new_mech: Mech = squad[i]
+		new_mech.position = $Terrain.map_to_local(grid_loc)
+		new_mech.clicked.connect(_on_mech_clicked)
+		add_child(new_mech)
+		friendly_mechs.append(new_mech)
+	
 
 func _on_mech_clicked(selected: Mech) -> void:
 	if( selected in friendly_mechs ):

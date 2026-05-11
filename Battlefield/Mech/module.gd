@@ -61,7 +61,7 @@ func get_effects_array() -> Array[Dictionary]:
 	if( shield != 0 ):
 		effects.append({"type": "shield", "val": shield})
 	if( speed != 0 ):
-		effects.append({"type": "speed", "val": shield})
+		effects.append({"type": "speed", "val": speed})
 	if( accuracy != 0 ):
 		effects.append({"type": "accuracy", "val": accuracy})
 	return effects

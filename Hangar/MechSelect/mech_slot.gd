@@ -48,7 +48,11 @@ func set_inactive() -> void:
 func select() -> void:
 	selected.emit()
 	add_theme_stylebox_override("panel", active_stylebox)
-	
+
+func get_held_mech() -> Mech:
+	if( held_panel ):
+		return held_panel.mech
+	return null
 	
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 	if( held_panel ):

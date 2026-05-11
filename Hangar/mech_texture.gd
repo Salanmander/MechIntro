@@ -46,6 +46,6 @@ func highlight_type(type: String) -> void:
 func _notification(what: int) -> void:
 	if( what == NOTIFICATION_DRAG_END ):
 		if( not get_viewport().gui_is_drag_successful() ):
-			if( not shown_slot.held_panel ):
+			if( shown_slot != null and  (not shown_slot.held_panel) ):
 				shown_slot.set_inactive()
 				clear_mech()

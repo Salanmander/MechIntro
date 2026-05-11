@@ -33,7 +33,7 @@ var accuracy_bonus: float: set = set_accuracy_bonus
 static func create_from_dict(mech_dict: Dictionary) -> Mech:
 	var new_mech: Mech = pack_mech.instantiate()
 	new_mech.dict = mech_dict
-	new_mech.set_parameters(Vector2(0, 0), mech_dict["battle_img"])
+	new_mech.set_sprite(mech_dict["battle_img"])
 	var slots: Array[Dictionary] = Array(mech_dict["slots"], TYPE_DICTIONARY, "", null)
 	new_mech.create_part_slots(slots)
 	return new_mech
@@ -63,8 +63,6 @@ func get_dict() -> Dictionary:
 
 func _init() -> void:
 	parts = []
-	
-	add_laser()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -80,13 +78,17 @@ func set_parameters(pos: Vector2, sprite_path: String) -> void:
 	position = pos
 	$Sprite.texture = load(sprite_path)
 
+func set_sprite(sprite_path: String) -> void:
+	$Sprite.texture = load(sprite_path)
+	
+	
 
 func apply_modules() -> void:
 	max_shield = 0
 	accuracy_bonus = 0
 	move_speed = 0
 	for part: Dictionary in parts:
-		if(part["type"] == "module"):
+		if(part["type"] != "weapon" and part["content"] != null):
 			apply_module(part["content"])
 	
 
@@ -186,7 +188,7 @@ func unhighlight() -> void:
 	
 func target(new_target: Mech) -> void:
 	for part: Dictionary in parts:
-		if(part["type"] == "weapon"):
+		if(part["type"] == "weapon" and part["content"] != null):
 			part["content"].change_target(new_target)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -208,7 +210,7 @@ func get_remaining_move() -> int:
 func get_fire_buttons() -> Array[Button]:
 	var buttons: Array[Button] = []
 	for part: Dictionary in parts:
-		if(part["type"] == "weapon"):
+		if(part["type"] == "weapon" and part["content"] != null):
 			buttons.append(part["content"].get_fire_button())
 	return buttons
 	
@@ -218,7 +220,7 @@ func spend_move(spent: int) -> void:
 func new_turn() -> void:
 	moved_this_turn = 0
 	for part: Dictionary in parts:
-		if(part["type"] == "weapon"):
+		if(part["type"] == "weapon" and part["content"] != null):
 			part["content"].new_turn()
 
 func has_shield() -> bool:
@@ -257,6 +259,6 @@ func set_armor(value: int) -> void:
 func set_accuracy_bonus(value: float) -> void:
 	accuracy_bonus = value
 	for part: Dictionary in parts:
-		if(part["type"] == "weapon"):
+		if(part["type"] == "weapon" and part["content"] != null):
 			part["content"].mech_accuracy = accuracy_bonus
 			

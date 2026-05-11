@@ -15,3 +15,13 @@ func _on_slot_selected(slot: MechSlot) -> void:
 	for child: Node in $MechContainer.get_children():
 		if child is MechSlot:
 			child.set_inactive()
+
+
+func get_squad() -> Array[Mech]:
+	var squad: Array[Mech] = []
+	for child: Node in $MechContainer.get_children():
+		if child is MechSlot:
+			var mech: Mech = child.get_held_mech()
+			if( mech ):
+				squad.append(mech)
+	return squad

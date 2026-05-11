@@ -52,9 +52,9 @@ func add_weapon_from_dict(mod) -> void:
 	$ModuleSelect/Weapons.add_child(new_panel)
 	pass
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func get_squad() -> Array[Mech]:
+	return $Squad.get_squad()
+	
 
 func highlight_for_tab(tab: int) -> void:
 	var type: String = $ModuleSelect.get_tab_title(tab)
@@ -71,3 +71,7 @@ func _on_squad_slot_selected(slot: MechSlot) -> void:
 	$Design/MechTexture.show_mech(slot)
 	highlight_for_tab($ModuleSelect.current_tab)
 	pass
+
+
+func _on_start_button_down() -> void:
+	SceneManager.start_battlefield()
