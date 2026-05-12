@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6xtxcm5ntgqc"]
+[gd_scene load_steps=4 format=3 uid="uid://b6xtxcm5ntgqc"]
 
 [ext_resource type="Script" path="res://Hangar/MechSelect/mech_panel.gd" id="1_e28cj"]
+[ext_resource type="Texture2D" uid="uid://erwv5no8u1go" path="res://Hangar/overWeightIcon.png" id="2_4jgl2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ash6"]
 bg_color = Color(0.743482, 0.743482, 0.743482, 0.701961)
@@ -26,3 +27,9 @@ offset_right = -23.0
 offset_bottom = -11.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="OverWeight" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(77, 15)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_4jgl2")

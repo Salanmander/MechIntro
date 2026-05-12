@@ -10,8 +10,10 @@ const height = Consts.MECH_PANEL_HGT
 var held_panel: MechPanel = null
 
 var click_started: bool = false
+var mech_over_weight: bool = false
 
 signal selected()
+signal mech_made_over_weight(is_over_weight: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -71,6 +73,8 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 		new_panel.instantiate_mech()
 	else:
 		new_panel = MechPanel.create_from_mech(data)
+	#TODO: connect the thing
+	new_panel.mech_made_over_weight.connect(_on_mech_over_weight)
 	add_child(new_panel)
 	held_panel = new_panel
 	
@@ -82,6 +86,9 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	select()
 	pass
 
+func _on_mech_over_weight(is_over_weight: bool) -> void:
+	mech_over_weight = is_over_weight
+	mech_made_over_weight.emit(is_over_weight)
 
 func _on_module_dragged() -> void:
 	clear_mech()

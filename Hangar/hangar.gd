@@ -75,3 +75,8 @@ func _on_squad_slot_selected(slot: MechSlot) -> void:
 
 func _on_start_button_down() -> void:
 	SceneManager.start_battlefield()
+
+
+func _on_squad_squad_over_weight(is_over_weight: bool) -> void:
+	$Start.disabled = is_over_weight
+	pass # Replace with function body.

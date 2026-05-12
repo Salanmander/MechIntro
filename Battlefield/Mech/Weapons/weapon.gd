@@ -49,7 +49,8 @@ func update_fire_button_text():
 		hit_prob *= 100
 		button_text += str(int(hit_prob)) + "%"
 	else:
-		button_text += "spread: " + str(spread) + "°"
+		var spread_angle: float = spread * (1-mech_accuracy)
+		button_text += "spread: " + "%.1f"%spread_angle + "°"
 	
 	fire_button.text = button_text
 		

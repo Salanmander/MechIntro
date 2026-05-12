@@ -8,6 +8,8 @@ signal drag_started
 var mech: Mech = null
 var dict: Dictionary = {}
 
+signal mech_made_over_weight(is_overweight: bool)
+
 static var pack_panel: PackedScene = load("res://Hangar/MechSelect/mech_panel.tscn")
 
 # mech dictionary contains:
@@ -29,7 +31,7 @@ static func create_from_mech(mech: Mech) -> MechPanel:
 	
 func instantiate_mech() -> void:
 	mech = Mech.create_from_dict(dict)
-	
+	mech.design_changed.connect(_on_mech_changed)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -37,6 +39,18 @@ func _ready() -> void:
 	size_flags_horizontal = SIZE_SHRINK_CENTER
 	# Border width of control this will be slotted over is 6 px
 	custom_minimum_size = Vector2(Consts.MECH_PANEL_WID-12, Consts.MECH_PANEL_HGT-12)
+	$OverWeight.position = Vector2(Consts.MECH_PANEL_WID - 30, 20)
+
+func set_mech_over_weight(is_over_weight: bool) -> void:
+	mech_made_over_weight.emit(is_over_weight)
+	$OverWeight.visible = is_over_weight
+
+
+func _on_mech_changed() -> void:
+	if(not mech):
+		return
+	set_mech_over_weight(mech.is_over_weight())
+
 
 func _get_drag_data(at_position: Vector2) -> Variant:
 	var preview: MechPanel = create_from_dict(dict)

@@ -7,6 +7,7 @@ static var pack_mech: PackedScene = load("res://Battlefield/Mech/mech.tscn")
 var dict: Dictionary
 
 signal clicked(selected_mech: Mech)
+signal design_changed()
 
 var move_speed: int = 0
 var moved_this_turn: int = 0
@@ -23,7 +24,12 @@ var max_armor: int: set = set_max_armor
 var shield: int: set = set_shield
 var armor: int: set = set_armor
 
+var max_weight: int
+
 var accuracy_bonus: float: set = set_accuracy_bonus
+
+# Records whether the mech has ever been in the scene tree
+var readied: bool = false
 
 
 # mech dictionary contains
@@ -36,6 +42,7 @@ static func create_from_dict(mech_dict: Dictionary) -> Mech:
 	new_mech.set_sprite(mech_dict["battle_img"])
 	var slots: Array[Dictionary] = Array(mech_dict["slots"], TYPE_DICTIONARY, "", null)
 	new_mech.create_part_slots(slots)
+	new_mech.max_weight = mech_dict["max_weight"]
 	return new_mech
 
 
@@ -66,6 +73,7 @@ func _init() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	readied = true
 	max_armor = 100
 	
 	apply_modules()
@@ -96,6 +104,19 @@ func apply_module(module: Module) -> void:
 	move_speed += module.speed
 	max_shield += module.shield
 	accuracy_bonus = accuracy_bonus + module.accuracy
+
+func get_max_weight() -> int:
+	return max_weight
+
+func get_used_weight() -> int:
+	var used_weight: int = 0
+	for part: Dictionary in parts:
+		if( part["content"] != null ):
+			used_weight += part["content"].weight
+	return used_weight
+	
+func is_over_weight() -> bool:
+	return get_used_weight() > max_weight
 
 # Creates ModuleSlot objects, and passes an array of dictionaries that contain
 #   "slot": the ModuleSlot object
@@ -128,6 +149,7 @@ func _on_slot_changed_to(new_part: ModulePanel, index: int) -> void:
 		set_weapon_at_slot(index, new_part.weapon)
 	else:
 		set_module_at_slot(index, new_part.module)
+	design_changed.emit()
 
 
 func remove_part_at_slot(index: int) -> void:
@@ -140,6 +162,7 @@ func set_module_at_slot(index: int, module: Module ) -> void:
 		assert(false, "module passed into wrong part index")
 		return
 	module_dict["content"] = module
+	apply_modules()
 	pass
 	
 	
@@ -235,26 +258,30 @@ func apply_damage_armor(damage: int) -> void:
 	
 func set_max_shield(value: int) -> void:
 	max_shield = value
-	if(max_shield == 0):
-		$ShieldBar.visible = false
-	else:
-		$ShieldBar.visible = true
-		$ShieldBar.max_value = max_shield
-		$ShieldBar.size.x = float(max_shield)/(max_armor) * $ArmorBar.size.x
-		$ShieldBar.position.x = -($ShieldBar.size.x / 2)
+	if(readied):
+		if(max_shield == 0):
+			$ShieldBar.visible = false
+		else:
+			$ShieldBar.visible = true
+			$ShieldBar.max_value = max_shield
+			$ShieldBar.size.x = float(max_shield)/(max_armor) * $ArmorBar.size.x
+			$ShieldBar.position.x = -($ShieldBar.size.x / 2)
 
 
 func set_max_armor(value: int) -> void:
 	max_armor = value
-	$ArmorBar.max_value = max_armor
+	if(readied):
+		$ArmorBar.max_value = max_armor
 	
 func set_shield(value: int) -> void:
 	shield = value
-	$ShieldBar.value = shield
+	if(readied):
+		$ShieldBar.value = shield
 	
 func set_armor(value: int) -> void:
 	armor = value
-	$ArmorBar.value = armor
+	if(readied):
+		$ArmorBar.value = armor
 	
 func set_accuracy_bonus(value: float) -> void:
 	accuracy_bonus = value

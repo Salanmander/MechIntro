@@ -2,6 +2,7 @@
 	{
 		"battle_img": "res://Battlefield/Mech/mech.png",
 		"hangar_img": "res://Hangar/hangarMech.png",
+		"max_weight": 55,
 		"slots": [
 			{
 				"type": "weapon",
