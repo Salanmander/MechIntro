@@ -8,6 +8,7 @@ var dict: Dictionary
 
 signal clicked(selected_mech: Mech)
 signal design_changed()
+signal description_changed(new_description: String)
 
 var move_speed: int = 0
 var moved_this_turn: int = 0
@@ -114,7 +115,19 @@ func get_used_weight() -> int:
 		if( part["content"] != null ):
 			used_weight += part["content"].weight
 	return used_weight
+
+func get_description() -> String:
+	var ret_text: String = ""
+	ret_text += "Chassis: " + dict["name"] + "\n\n"
+	ret_text += "Move Speed: " + str(move_speed) + "\n"
+	ret_text += "Shield: " + str(max_shield) + "\n"
+	ret_text += "Accuracy Bonus: " + str(accuracy_bonus*100) + "%\n"
+	ret_text += "Weight: " + str(get_used_weight()) + "/" + str(max_weight)
 	
+	
+	
+	return ret_text
+
 func is_over_weight() -> bool:
 	return get_used_weight() > max_weight
 
@@ -150,6 +163,7 @@ func _on_slot_changed_to(new_part: ModulePanel, index: int) -> void:
 	else:
 		set_module_at_slot(index, new_part.module)
 	design_changed.emit()
+	description_changed.emit(get_description())
 
 
 func remove_part_at_slot(index: int) -> void:

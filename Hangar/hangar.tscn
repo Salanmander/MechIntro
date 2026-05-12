@@ -111,19 +111,12 @@ expand_mode = 4
 stretch_mode = 5
 script = ExtResource("2_353t0")
 
-[node name="Label" type="Label" parent="Design"]
+[node name="Description" type="Label" parent="Design/MechTexture"]
 layout_mode = 0
-offset_left = 37.0
-offset_top = 37.0
-offset_right = 347.0
-offset_bottom = 619.0
-text = "Chassis: 
-
-Move Speed:
-Shield:
-Accuracy Bonus:
-Weight:
-"
+offset_left = -289.0
+offset_top = 35.0
+offset_right = 21.0
+offset_bottom = 617.0
 
 [node name="Start" type="Button" parent="."]
 layout_mode = 0

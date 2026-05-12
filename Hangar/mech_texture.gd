@@ -8,16 +8,21 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func clear_mech() -> void:
-	
+	remove_connections_to(update_description)
+	$Description.text = ""
 	for child: Node in get_children():
 		if child is ModuleSlot:
 			child.queue_free()
 			remove_child(child)
 
 func show_mech(mech_slot: MechSlot) -> void:
+	remove_connections_to(update_description)
 	shown_slot = mech_slot
 	var mech: Mech = mech_slot.held_panel.mech
 	var mech_dict = mech.dict
+	$Description.text = mech.get_description()
+	
+	mech.description_changed.connect(update_description)
 	
 	texture = load(mech_dict["hangar_img"])
 	
@@ -43,9 +48,19 @@ func highlight_type(type: String) -> void:
 			child.highlight_if_type(type)
 
 
+func update_description(new_description: String) -> void:
+	$Description.text = new_description
+
 func _notification(what: int) -> void:
 	if( what == NOTIFICATION_DRAG_END ):
 		if( not get_viewport().gui_is_drag_successful() ):
 			if( shown_slot != null and  (not shown_slot.held_panel) ):
 				shown_slot.set_inactive()
 				clear_mech()
+
+
+func remove_connections_to(function: Callable) -> void:
+	var conns: Array[Dictionary] = get_incoming_connections()
+	for conn: Dictionary in conns:
+		if conn["callable"] == function:
+			conn["signal"].disconnect(conn["callable"])
