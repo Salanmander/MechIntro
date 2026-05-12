@@ -1,5 +1,43 @@
 [
 	{
+		"name": "Cricket",
+		"battle_img": "res://Battlefield/Mech/mech.png",
+		"hangar_img": "res://Hangar/hangarMech.png",
+		"max_weight": 80,
+		"slots": [
+			{
+				"type": "weapon",
+				"hangar_pos": [0.7, 0.28],
+				"battle_pos": [0, -10]
+			},
+			{
+				"type": "core",
+				"hangar_pos": [0.4, 0.28]
+			},
+			{
+				"type": "core",
+				"hangar_pos": [0.4, 0.4]
+			},
+			{
+				"type": "leg",
+				"hangar_pos": [0.3, 0.6]
+			},
+			{
+				"type": "leg",
+				"hangar_pos": [0.3, 0.75]
+			},
+			{
+				"type": "leg",
+				"hangar_pos": [0.75, 0.6]
+			},
+			{
+				"type": "leg",
+				"hangar_pos": [0.75, 0.75]
+			},
+		]
+	},
+	{
+		"name": "Mantis",
 		"battle_img": "res://Battlefield/Mech/mech.png",
 		"hangar_img": "res://Hangar/hangarMech.png",
 		"max_weight": 55,
