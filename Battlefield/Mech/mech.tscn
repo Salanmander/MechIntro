@@ -25,6 +25,7 @@ script = ExtResource("1_l2ovk")
 shape = SubResource("RectangleShape2D_jagsu")
 
 [node name="Highlight" type="Line2D" parent="."]
+visible = false
 points = PackedVector2Array(-45, -45, -45, 45, 45, 45, 45, -45)
 closed = true
 width = 3.0

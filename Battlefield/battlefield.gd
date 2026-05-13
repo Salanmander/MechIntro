@@ -109,6 +109,19 @@ func untarget_all() -> void:
 			child.queue_free()
 			remove_child(child)
 
+
+func unselect_all() -> void:
+	
+	$MoveOverlay.clear()
+	untarget_all()
+	var current_buttons: Array[Node] = $Controls/Weapons.get_children()
+	for button: Node in current_buttons:
+		$Controls/Weapons.remove_child(button)
+	
+	if( selected_mech ):
+		selected_mech.unhighlight()
+		selected_mech = null
+
 func _on_terrain_click_at(grid_loc: Vector2i) -> void:
 	if(selected_mech):
 		if($MoveOverlay.is_valid_move(grid_loc)):
@@ -121,18 +134,13 @@ func _on_terrain_click_at(grid_loc: Vector2i) -> void:
 			selected_mech.spend_move(move_dist)
 			selected_mech.position = $Terrain.map_to_local(grid_loc)
 		
-		$MoveOverlay.clear()
-		untarget_all()
-		selected_mech.unhighlight()
-		selected_mech = null
-		var current_buttons: Array[Node] = $Controls/Weapons.get_children()
-		for button: Node in current_buttons:
-			$Controls/Weapons.remove_child(button)
+		unselect_all()
+		
 
 
 func _on_end_turn_pressed() -> void:
+	unselect_all()
 	var children: Array[Node] = get_children()
-	untarget_all()
 	active_team = active_team % 2 + 1
 	for child: Node in children:
 		if child is Mech:
