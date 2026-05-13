@@ -7,32 +7,32 @@
 		"slots": [
 			{
 				"type": "weapon",
-				"hangar_pos": [0.7, 0.28],
+				"hangar_pos": [0.8, 0.15],
 				"battle_pos": [0, -42]
 			},
 			{
 				"type": "core",
-				"hangar_pos": [0.4, 0.28]
+				"hangar_pos": [0.3, 0.18]
 			},
 			{
 				"type": "core",
-				"hangar_pos": [0.4, 0.4]
+				"hangar_pos": [0.3, 0.35]
 			},
 			{
 				"type": "leg",
-				"hangar_pos": [0.3, 0.6]
+				"hangar_pos": [0.33, 0.62]
 			},
 			{
 				"type": "leg",
-				"hangar_pos": [0.3, 0.75]
+				"hangar_pos": [0.33, 0.8]
 			},
 			{
 				"type": "leg",
-				"hangar_pos": [0.75, 0.6]
+				"hangar_pos": [0.78, 0.62]
 			},
 			{
 				"type": "leg",
-				"hangar_pos": [0.75, 0.75]
+				"hangar_pos": [0.78, 0.8]
 			},
 		]
 	},
