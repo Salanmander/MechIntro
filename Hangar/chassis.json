@@ -1,14 +1,14 @@
 [
 	{
 		"name": "Cricket",
-		"battle_img": "res://Battlefield/Mech/mech.png",
-		"hangar_img": "res://Hangar/hangarMech.png",
+		"battle_img": "res://Battlefield/Mech/cricketOnBattlefield.png",
+		"hangar_img": "res://Hangar/cricketInHangar.png",
 		"max_weight": 80,
 		"slots": [
 			{
 				"type": "weapon",
 				"hangar_pos": [0.7, 0.28],
-				"battle_pos": [0, -10]
+				"battle_pos": [0, -42]
 			},
 			{
 				"type": "core",
@@ -38,19 +38,19 @@
 	},
 	{
 		"name": "Mantis",
-		"battle_img": "res://Battlefield/Mech/mech.png",
-		"hangar_img": "res://Hangar/hangarMech.png",
+		"battle_img": "res://Battlefield/Mech/mantisOnBattlefield.png",
+		"hangar_img": "res://Hangar/mantisInHangar.png",
 		"max_weight": 55,
 		"slots": [
 			{
 				"type": "weapon",
 				"hangar_pos": [0.2, 0.48],
-				"battle_pos": [10, -10]
+				"battle_pos": [40, -20]
 			},
 			{
 				"type": "weapon",
 				"hangar_pos": [0.8, 0.48],
-				"battle_pos": [-10, -10]
+				"battle_pos": [-43, -18]
 			},
 			{
 				"type": "leg",

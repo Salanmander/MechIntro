@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bik8dij1wkkxt"]
 
 [ext_resource type="Script" path="res://Battlefield/Mech/mech.gd" id="1_l2ovk"]
-[ext_resource type="Texture2D" uid="uid://cxtq6lfvmm5r" path="res://Battlefield/Mech/mech.png" id="2_x85m1"]
+[ext_resource type="Texture2D" uid="uid://ch00xt7pq31h1" path="res://Battlefield/Mech/cricketOnBattlefield.png" id="2_rbbrn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jagsu"]
 size = Vector2(90, 90)
@@ -24,14 +24,13 @@ script = ExtResource("1_l2ovk")
 [node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_jagsu")
 
-[node name="Sprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_x85m1")
-
 [node name="Highlight" type="Line2D" parent="."]
-visible = false
 points = PackedVector2Array(-45, -45, -45, 45, 45, 45, 45, -45)
 closed = true
 width = 3.0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_rbbrn")
 
 [node name="ShieldBar" type="ProgressBar" parent="."]
 offset_left = -49.0
