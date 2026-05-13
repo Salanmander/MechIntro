@@ -1,5 +1,9 @@
 extends Control
 
+var team1: Array[Mech] = []
+var team2: Array[Mech] = []
+
+var active_team: int = 1
 
 func _ready() -> void:
 	$Squad.slot_selected.connect(_on_squad_slot_selected)
@@ -74,7 +78,15 @@ func _on_squad_slot_selected(slot: MechSlot) -> void:
 
 
 func _on_start_button_down() -> void:
-	SceneManager.start_battlefield()
+	if( active_team == 1 ):
+		active_team = 2
+		team1 = get_squad()
+		$Squad/TeamLabel.text = "Team 2"
+		$Squad.setup_slots()
+		$Design/MechTexture.clear_mech()
+	else:
+		team2 = get_squad()
+		SceneManager.start_battlefield()
 
 
 func _on_squad_squad_over_weight(is_over_weight: bool) -> void:

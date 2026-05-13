@@ -3,8 +3,11 @@ extends Node2D
 
 
 var selected_mech: Mech = null
-var friendly_mechs: Array[Mech] = []
-var enemy_mechs: Array[Mech] = []
+
+var active_team: int = 1
+
+var team1_mechs: Array[Mech] = []
+var team2_mechs: Array[Mech] = []
 
 @onready var pack_mech: PackedScene = load("res://Battlefield/Mech/mech.tscn")
 @onready var pack_reticle: PackedScene = load("res://Battlefield/UI/reticle.tscn")
@@ -17,43 +20,46 @@ func _ready() -> void:
 	var enemy_sprite: String = "res://Battlefield/Mech/enemy.png"
 	
 	
-	
-	new_mech = pack_mech.instantiate()
-	var grid_loc = Vector2i(8, -7)
-	new_mech.set_parameters($Terrain.map_to_local(grid_loc), enemy_sprite)
-	new_mech.clicked.connect(_on_mech_clicked)
-	new_mech.add_module(Module.create_shield(130, 10))
-	add_child(new_mech)
-	enemy_mechs.append(new_mech)
-	
-	
-	new_mech = pack_mech.instantiate()
-	grid_loc = Vector2i(9, -8)
-	new_mech.set_parameters($Terrain.map_to_local(grid_loc), enemy_sprite)
-	new_mech.clicked.connect(_on_mech_clicked)
-	add_child(new_mech)
-	enemy_mechs.append(new_mech)
-	
 	pass # Replace with function body.
 
-
-func add_squad(squad: Array[Mech]) -> void:
-	var grid_locs: Array[Vector2i] = [
-		Vector2i(4, 2),
-		Vector2i(6, 2),
-		Vector2i(5, 0),
-		]
-	
+func add_team(team_num: int, squad: Array[Mech]) -> void:
+	var grid_locs: Array[Vector2i]
+	if( team_num == 1 ):
+		grid_locs = [
+			Vector2i(4, 2),
+			Vector2i(6, 2),
+			Vector2i(5, 0),
+			]
+	else:
+		grid_locs = [
+			Vector2i(8, -6),
+			Vector2i(10, -6),
+			Vector2i(10, -8),
+			]
+			
 	for i in range (squad.size()):
 		var grid_loc: Vector2i = grid_locs[i]
 		var new_mech: Mech = squad[i]
 		new_mech.position = $Terrain.map_to_local(grid_loc)
 		new_mech.clicked.connect(_on_mech_clicked)
 		add_child(new_mech)
-		friendly_mechs.append(new_mech)
+		if( team_num == 1):
+			team1_mechs.append(new_mech)
+		else:
+			team2_mechs.append(new_mech)
+		
+
 	
 
 func _on_mech_clicked(selected: Mech) -> void:
+	var friendly_mechs: Array[Mech]
+	var enemy_mechs: Array[Mech]
+	if( active_team == 1 ):
+		friendly_mechs = team1_mechs
+		enemy_mechs = team2_mechs
+	else:
+		friendly_mechs = team2_mechs
+		enemy_mechs = team1_mechs
 	if( selected in friendly_mechs ):
 		select_mech(selected)
 	elif( selected in enemy_mechs ):
@@ -126,6 +132,8 @@ func _on_terrain_click_at(grid_loc: Vector2i) -> void:
 
 func _on_end_turn_pressed() -> void:
 	var children: Array[Node] = get_children()
+	untarget_all()
+	active_team = active_team % 2 + 1
 	for child: Node in children:
 		if child is Mech:
 			child.new_turn()

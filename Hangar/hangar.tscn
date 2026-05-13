@@ -84,6 +84,15 @@ offset_right = 1349.0
 offset_bottom = 151.0
 alignment = 1
 
+[node name="TeamLabel" type="Label" parent="Squad"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 30.0
+offset_right = 195.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 61
+text = "Team 1"
+
 [node name="Design" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -120,11 +129,11 @@ offset_bottom = 617.0
 
 [node name="Start" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1600.0
-offset_top = 939.0
-offset_right = 1788.0
-offset_bottom = 990.0
-text = "Begin Match"
+offset_left = 1543.0
+offset_top = 929.0
+offset_right = 1766.0
+offset_bottom = 980.0
+text = "Confirm Squad"
 
 [connection signal="tab_changed" from="ModuleSelect" to="." method="_on_module_select_tab_changed"]
 [connection signal="squad_over_weight" from="Squad" to="." method="_on_squad_squad_over_weight"]

@@ -5,6 +5,14 @@ signal squad_over_weight(is_over_weight: bool)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	setup_slots()
+	
+	
+func setup_slots() -> void:
+	for child: Node in $MechContainer.get_children():
+		if child is MechSlot:
+			child.queue_free()
+			$MechContainer.remove_child(child)
 	for i in range(3):
 		var new_slot: MechSlot = MechSlot.new()
 		new_slot.mech_made_over_weight.connect(_on_mech_overweight_change)
