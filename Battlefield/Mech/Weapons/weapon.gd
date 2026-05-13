@@ -103,7 +103,7 @@ func draw_laser_and_connect() -> bool:
 	
 	var laser: Line2D = Line2D.new()
 	laser.width = 2
-	laser.add_point(position)
+	laser.add_point(Vector2(0,0))
 	laser.add_point(Vector2(length * cos(angle), length * sin(angle)))
 	add_child(laser)
 	

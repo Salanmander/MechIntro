@@ -191,6 +191,8 @@ func set_weapon_at_slot(index: int, weapon: Weapon ) -> void:
 		remove_child(cur_weapon)
 	weapon_dict["content"] = weapon
 	add_weapon(weapon)
+	var pos_array = weapon_dict["battle_pos"]
+	weapon.position = Vector2(pos_array[0], pos_array[1])
 	pass
 
 func add_module(module: Module) -> void:
