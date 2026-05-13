@@ -55,9 +55,20 @@ static func create_from_weapon(weap: Weapon) -> ModulePanel:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	size_flags_horizontal = SIZE_SHRINK_CENTER
-	
+	update_tooltip_text()
 	# Border width of control this will be slotted over is 6 px
 	custom_minimum_size = Vector2(Consts.MOD_PANEL_WID-12, Consts.MOD_PANEL_HGT-12)
+
+func update_tooltip_text() -> void:
+	tooltip_text = ""
+	if( type == "weapon" ):
+		tooltip_text += "Shield Damage: " + str(weapon.dam_shield) + "\n"
+		tooltip_text += "Armor Damage: " + str(weapon.dam_armor)+ "\n"
+		tooltip_text += "Spread: " + str(weapon.spread) + "°"
+	else:
+		for effect: Dictionary in module.get_effects_array():
+			tooltip_text += effect["type"] + ": " + str(effect["val"]) + "\n"
+	pass
 
 func _get_drag_data(at_position: Vector2) -> Dictionary:
 	var data_dict = get_dict()
