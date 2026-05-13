@@ -1,6 +1,5 @@
-[gd_scene load_steps=9 format=3 uid="uid://ddp4ll61bfmck"]
+[gd_scene load_steps=8 format=3 uid="uid://ddp4ll61bfmck"]
 
-[ext_resource type="Texture2D" uid="uid://be4g7vmcmpw2m" path="res://Hangar/hangarMech.png" id="1_kd3wd"]
 [ext_resource type="Script" path="res://Hangar/hangar.gd" id="1_txdjg"]
 [ext_resource type="Script" path="res://Hangar/mech_texture.gd" id="2_353t0"]
 [ext_resource type="Script" path="res://Hangar/mech_container.gd" id="2_bvw4t"]
@@ -115,7 +114,6 @@ offset_right = -344.0
 offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_kd3wd")
 expand_mode = 4
 stretch_mode = 5
 script = ExtResource("2_353t0")
