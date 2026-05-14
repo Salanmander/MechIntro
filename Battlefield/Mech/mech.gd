@@ -9,6 +9,7 @@ var dict: Dictionary
 signal clicked(selected_mech: Mech)
 signal design_changed()
 signal description_changed(new_description: String)
+signal shot_fired(shot: CannonShot)
 
 var move_speed: int = 0
 var moved_this_turn: int = 0
@@ -204,6 +205,7 @@ func add_module(module: Module) -> void:
 
 func add_weapon(new_weapon: Weapon) -> void:
 	new_weapon.mech_accuracy = accuracy_bonus
+	new_weapon.shot_fired.connect(_on_shot_fired)
 	add_child(new_weapon)
 	
 
@@ -271,7 +273,12 @@ func apply_damage_shield(damage: int) -> void:
 func apply_damage_armor(damage: int) -> void:
 	armor = max(0, armor - damage)
 	$ArmorBar.value = armor
-	
+
+func _on_shot_fired(shot: CannonShot) -> void:
+	shot.position += position
+	shot.target += position
+	shot_fired.emit(shot)
+
 func set_max_shield(value: int) -> void:
 	max_shield = value
 	if(readied):

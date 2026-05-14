@@ -2,6 +2,8 @@ extends Node2D
 class_name Weapon
 
 
+signal shot_fired(shot: CannonShot)
+
 var fire_button: Button = null
 var target: Mech = null
 
@@ -72,7 +74,7 @@ func fire() -> void:
 	if(not target):
 		return
 	disable()
-	var hit: bool = draw_laser_and_connect()
+	var hit: bool = draw_weapon_and_hit()
 	if( not hit ):
 		return
 	if(target.has_shield()):
@@ -82,7 +84,7 @@ func fire() -> void:
 	pass
 	
 
-func draw_laser_and_connect() -> bool:
+func draw_weapon_and_hit() -> bool:
 	var dist: float = (target.position - global_position).length()
 	var max_ratio: float = target.get_radius() / dist
 	var max_angle: float = atan(max_ratio)
@@ -100,16 +102,29 @@ func draw_laser_and_connect() -> bool:
 		length = 5000
 	
 	angle += global_position.angle_to_point(target.position)
+	draw_weapon(Vector2(length * cos(angle), length * sin(angle)))
 	
-	var laser: Line2D = Line2D.new()
-	laser.width = 2
-	laser.add_point(Vector2(0,0))
-	laser.add_point(Vector2(length * cos(angle), length * sin(angle)))
-	add_child(laser)
-	
-	get_tree().create_timer(0.3).timeout.connect(laser.queue_free)
 	return hit
 	
+
+func draw_weapon(target: Vector2) -> void:
+	if(weapon_type == "laser"):
+		
+		var laser: Line2D = Line2D.new()
+		laser.width = 2
+		laser.add_point(Vector2(0,0))
+		laser.add_point(target)
+		add_child(laser)
+		
+		get_tree().create_timer(0.3).timeout.connect(laser.queue_free)
+
+	elif(weapon_type == "cannon"):
+		var shot: CannonShot = CannonShot.create(target)
+		shot.position += position
+		shot.target += position
+		shot_fired.emit(shot)
+		pass
+
 func get_hit_prob() -> float:
 	if(not target):
 		return -1

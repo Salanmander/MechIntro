@@ -12,6 +12,8 @@ var team2_mechs: Array[Mech] = []
 @onready var pack_mech: PackedScene = load("res://Battlefield/Mech/mech.tscn")
 @onready var pack_reticle: PackedScene = load("res://Battlefield/UI/reticle.tscn")
 
+var explosion_animation: SpriteFrames = load("res://Battlefield/explosion.tres")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var new_mech: Mech = pack_mech.instantiate()
@@ -42,6 +44,7 @@ func add_team(team_num: int, squad: Array[Mech]) -> void:
 		var new_mech: Mech = squad[i]
 		new_mech.position = $Terrain.map_to_local(grid_loc)
 		new_mech.clicked.connect(_on_mech_clicked)
+		new_mech.shot_fired.connect(_on_shot_fired)
 		add_child(new_mech)
 		if( team_num == 1):
 			team1_mechs.append(new_mech)
@@ -146,3 +149,17 @@ func _on_end_turn_pressed() -> void:
 		if child is Mech:
 			child.new_turn()
 	pass # Replace with function body.
+	
+func _on_shot_fired(shot: CannonShot) -> void:
+	shot.exploded.connect(_on_explode_at)
+	add_child(shot)
+	
+func _on_explode_at(loc: Vector2) -> void:
+	var explosion: AnimatedSprite2D = AnimatedSprite2D.new()
+	explosion.sprite_frames = explosion_animation
+	explosion.position = loc
+	add_child(explosion)
+	explosion.animation_finished.connect(explosion.queue_free)
+	explosion.play()
+	pass
+	
