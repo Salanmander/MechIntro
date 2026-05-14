@@ -8,7 +8,7 @@
 			{
 				"type": "weapon",
 				"hangar_pos": [0.8, 0.15],
-				"battle_pos": [0, -42]
+				"battle_pos": [42, 0]
 			},
 			{
 				"type": "core",
@@ -45,12 +45,12 @@
 			{
 				"type": "weapon",
 				"hangar_pos": [0.2, 0.48],
-				"battle_pos": [40, -20]
+				"battle_pos": [20, 40]
 			},
 			{
 				"type": "weapon",
 				"hangar_pos": [0.8, 0.48],
-				"battle_pos": [-43, -18]
+				"battle_pos": [18, -43]
 			},
 			{
 				"type": "leg",

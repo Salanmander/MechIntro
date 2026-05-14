@@ -3,6 +3,7 @@ class_name Weapon
 
 
 signal shot_fired(shot: CannonShot)
+signal laser_fired(laser: Line2D)
 
 var fire_button: Button = null
 var target: Mech = null
@@ -112,16 +113,16 @@ func draw_weapon(target: Vector2) -> void:
 		
 		var laser: Line2D = Line2D.new()
 		laser.width = 2
-		laser.add_point(Vector2(0,0))
-		laser.add_point(target)
-		add_child(laser)
-		
+		laser.add_point(global_position)
+		laser.add_point(global_position + target)
 		get_tree().create_timer(0.3).timeout.connect(laser.queue_free)
 
+		laser_fired.emit(laser)
+		
 	elif(weapon_type == "cannon"):
 		var shot: CannonShot = CannonShot.create(target)
-		shot.position += position
-		shot.target += position
+		shot.position = global_position
+		shot.target = global_position + target
 		shot_fired.emit(shot)
 		pass
 

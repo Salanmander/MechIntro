@@ -18,6 +18,15 @@
 		"weight": 20 
 	},
 	{
+		"type": "weapon",
+		"name": "snipe",
+		"weapon_type": "cannon",
+		"shield_dam": 5,
+		"armor_dam": 2,
+		"spread": 0,
+		"weight": 1 
+	},
+	{
 		"type": "leg",
 		"name": "small actuator",
 		"effects": [

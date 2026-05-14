@@ -45,6 +45,7 @@ func add_team(team_num: int, squad: Array[Mech]) -> void:
 		new_mech.position = $Terrain.map_to_local(grid_loc)
 		new_mech.clicked.connect(_on_mech_clicked)
 		new_mech.shot_fired.connect(_on_shot_fired)
+		new_mech.laser_fired.connect(_on_laser_fired)
 		add_child(new_mech)
 		if( team_num == 1):
 			team1_mechs.append(new_mech)
@@ -153,6 +154,9 @@ func _on_end_turn_pressed() -> void:
 func _on_shot_fired(shot: CannonShot) -> void:
 	shot.exploded.connect(_on_explode_at)
 	add_child(shot)
+
+func _on_laser_fired(laser: Line2D) -> void:
+	add_child(laser)
 	
 func _on_explode_at(loc: Vector2) -> void:
 	var explosion: AnimatedSprite2D = AnimatedSprite2D.new()

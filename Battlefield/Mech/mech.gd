@@ -10,6 +10,7 @@ signal clicked(selected_mech: Mech)
 signal design_changed()
 signal description_changed(new_description: String)
 signal shot_fired(shot: CannonShot)
+signal laser_fired(laser: Line2D)
 
 var move_speed: int = 0
 var moved_this_turn: int = 0
@@ -189,7 +190,7 @@ func set_weapon_at_slot(index: int, weapon: Weapon ) -> void:
 	var cur_weapon: Weapon = weapon_dict["content"]
 	if( cur_weapon != null ):
 		cur_weapon.queue_free()
-		remove_child(cur_weapon)
+		$Sprite.remove_child(cur_weapon)
 	weapon_dict["content"] = weapon
 	add_weapon(weapon)
 	var pos_array = weapon_dict["battle_pos"]
@@ -206,20 +207,9 @@ func add_module(module: Module) -> void:
 func add_weapon(new_weapon: Weapon) -> void:
 	new_weapon.mech_accuracy = accuracy_bonus
 	new_weapon.shot_fired.connect(_on_shot_fired)
-	add_child(new_weapon)
+	new_weapon.laser_fired.connect(_on_laser_fired)
+	$Sprite.add_child(new_weapon)
 	
-
-func add_laser() -> void:
-	var new_weapon: Weapon = Weapon.new()
-	new_weapon.set_parameters("laser")
-	new_weapon.position = Vector2(randi_range(-30, 30), randi_range(-30, 30))
-	new_weapon.mech_accuracy = accuracy_bonus
-	
-	var weapon_dict: Dictionary = {}
-	weapon_dict["type"] = "weapon"
-	weapon_dict["content"] = new_weapon
-	parts.append(weapon_dict)
-	add_child(new_weapon)
 
 func highlight() -> void:
 	$Highlight.visible = true
@@ -228,9 +218,14 @@ func unhighlight() -> void:
 	$Highlight.visible = false
 	
 func target(new_target: Mech) -> void:
+	if( new_target ):
+		face_point(new_target.global_position)
 	for part: Dictionary in parts:
 		if(part["type"] == "weapon" and part["content"] != null):
 			part["content"].change_target(new_target)
+
+func face_point(global_loc: Vector2) -> void:
+	$Sprite.rotation = global_position.angle_to_point(global_loc)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
@@ -275,9 +270,10 @@ func apply_damage_armor(damage: int) -> void:
 	$ArmorBar.value = armor
 
 func _on_shot_fired(shot: CannonShot) -> void:
-	shot.position += position
-	shot.target += position
 	shot_fired.emit(shot)
+
+func _on_laser_fired(laser: Line2D) -> void:
+	laser_fired.emit(laser)
 
 func set_max_shield(value: int) -> void:
 	max_shield = value
